@@ -1,5 +1,4 @@
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.20;
 
 // https://github.com/OpenZeppelin/openzeppelin-contracts/tree/v4.8.3/contracts
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
@@ -7,7 +6,6 @@ import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
-
 
 
 struct CollateralToken {
@@ -20,10 +18,14 @@ contract DeFiDeTo is ERC20Burnable, Ownable {
 
     address[] public collateralTokens;
     mapping(address => uint256) public tokenAmountMultiplier;
-    address public baseToken; // The token with the smallest amount. Present soley for readability, it's identical to collateralTokens[0] 
+    address public baseToken; // The token with the smallest amount. Present soley for readability, it's identical to collateralTokens[0]
+
+    function getCollateralTokensCount() public view returns (uint256) {
+        return collateralTokens.length;
+    }
 
     constructor(CollateralToken[] memory tokens) ERC20("Decentralized Financial Derivatives Token", "DeFiDeTo") {
-
+        require(tokens.length > 1, "Must have at least two collateral token");
         // Sort CollaterlToken by amount, smallest to largest
         for (uint256 i = 0; i < tokens.length; i++) {
             for (uint256 j = i + 1; j < tokens.length; j++) {
