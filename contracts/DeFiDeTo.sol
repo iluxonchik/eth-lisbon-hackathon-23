@@ -26,6 +26,15 @@ contract DeFiDeTo is ERC20Burnable, Ownable {
 
     constructor(CollateralToken[] memory tokens) ERC20("Decentralized Financial Derivatives Token", "DeFiDeTo") {
         require(tokens.length > 1, "Must have at least two collateral token");
+
+        // Ensure that duplicate tokens are not present
+        for (uint256 i = 0; i < tokens.length; i++) {
+            for (uint256 j = i + 1; j < tokens.length; j++) {
+                require(tokens[i].token != tokens[j].token, "Duplicate collateral token");
+            }
+        }
+
+
         // Sort CollaterlToken by amount, smallest to largest
         for (uint256 i = 0; i < tokens.length; i++) {
             for (uint256 j = i + 1; j < tokens.length; j++) {
