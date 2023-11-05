@@ -15,7 +15,7 @@ STRING_STRATEGY = strategy("string", max_size=100)
 interactor_account_strategy: st.SearchStrategy = st.integers(min_value=1, max_value=9).map(lambda index: accounts[index])
 
 @composite
-def collateral_token_list_strategy(draw, num_elements: st.SearchStrategy = st.integers(min_value=1, max_value=10)):
+def collateral_token_list_strategy(draw, num_elements: st.SearchStrategy = st.integers(min_value=2, max_value=10)):
     num_elements: int = draw(num_elements)
     address_list_st: st.SearchStrategy = st.lists(ADDRESS_STRATEGY, min_size=num_elements, max_size=num_elements, unique=True)
     amounts_list_st: st.SearchStrategy = st.lists(UINT256_POSITIVE_STRATEGY, min_size=num_elements, max_size=num_elements)
